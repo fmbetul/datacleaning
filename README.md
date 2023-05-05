@@ -41,4 +41,3 @@ For further details on available functions, including input and output specifica
 ## License
 
 The `datacleaning` package is licensed under the GPL-3 license.
-
