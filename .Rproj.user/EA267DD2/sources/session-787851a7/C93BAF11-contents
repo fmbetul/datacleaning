@@ -1,0 +1,13 @@
+# DataCleanPkg_v1.2
+# 2023/04/30
+
+validateExtraCluster <- function(SeuData){
+
+  # Update Leftovers
+  assign("Leftovers", NewLeftovers, envir = globalenv())
+
+  print(paste("Number of cells in updated Leftovers must be:", dim(NewLeftovers)[1], sep = " "))
+  print(paste("Number of cells in updated Leftovers:", dim(Leftovers)[1], sep = " "))
+  print(CheckUMAP(sample = SeuData, CheckInput = Leftovers))
+
+  }

@@ -1,0 +1,78 @@
+# DataCleanPkg_v1.2
+# 2023/04/30
+
+CropCluster = function(SeuData, ClusterName, ClusterNo = 0,
+                       min.x = -100, max.x = 100,
+                       min.y = -100, max.y = 100){
+
+
+  Filename = as.character(substitute(SeuData))
+
+  # get cluster names:
+  Clusters <- levels(Idents(SeuData))
+
+  # get the UMAP coordinates of each cell
+  UMAP_Data <- as.data.frame(SeuData@reductions$umap@cell.embeddings)
+
+
+  # 1. Select a new cluster & check its properties
+
+  if(ClusterNo > 0){
+    ClusterName <- Clusters[ClusterNo]
+    if (!is.character(ClusterName)) {
+      stop("Error: This ClusterNo is not available.")
+    }
+  }
+
+  if(!(ClusterName %in% Clusters)){
+    stop("Error: This ClusterName is not valid.")
+  }
+
+  cluster.barcodes <- WhichCells(SeuData, idents = ClusterName)
+
+  # Check-point
+  print(paste("Current cluster:", ClusterName, sep = " "))
+  print(paste("Total number of cells in this cluster:", length(cluster.barcodes), sep = " "))
+
+  # get UMAP coordinates of the cells in the selected cluster
+  Cluster_Coords <- subset(UMAP_Data, row.names(UMAP_Data) %in% cluster.barcodes)
+
+  # look at the selected cluster on UMAP
+  check.cluster <- CheckUMAP(Cluster_Coords, sample = SeuData)
+  print(check.cluster)
+
+
+  # 2. set the cluster boundaries
+  Cluster_Clean = subset(UMAP_Data,
+                         row.names(UMAP_Data) %in% cluster.barcodes
+                         & UMAP_Data $UMAP_1 > min.x
+                         & UMAP_Data $UMAP_1 < max.x
+                         & UMAP_Data $UMAP_2 > min.y
+                         & UMAP_Data $UMAP_2 < max.y)
+
+
+  print(paste("Cells left in", ClusterName ,"cluster:", dim(Cluster_Clean)[1], sep = " "))
+  print(paste("Current number of cells in current Leftovers must be", length(cluster.barcodes) - dim(Cluster_Clean)[1], sep = " "))
+
+  # look at the new cluster on UMAP
+  check.cropped.cluster <- CheckUMAP(Cluster_Clean, sample = SeuData)
+  print(check.cropped.cluster)
+
+  # Save the _Clean cluster
+  set.name <- paste0(ClusterName, "_Clean")     # eg."POMC_Clean"
+  assign(set.name, Cluster_Clean, envir = globalenv())
+
+
+  # 3. Current_Leftovers (double-check)
+
+  Current_Leftovers <- subset(Cluster_Coords, !(row.names(Cluster_Coords) %in% row.names(Cluster_Clean)))
+  print(paste("Current number of cells in current Leftovers is", dim(Current_Leftovers)[1], sep = " "))
+
+  # look at the Leftovers on UMAP
+  check.leftovers <- CheckUMAP(Current_Leftovers, sample = SeuData)
+  print(check.leftovers)
+
+  # look at all clusters overall
+  print(DimPlot(SeuData, reduction = "umap", label  =TRUE))
+
+  }

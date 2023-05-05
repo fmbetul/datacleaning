@@ -1,0 +1,26 @@
+{
+    "id": "2899B6DB",
+    "path": "~/Documents/R_projects/datacleaning/R/getLeftovers.R",
+    "project_path": "R/getLeftovers.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1683054762743.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "12,22",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1683246164,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1683246164573,
+    "read_only": false,
+    "read_only_alternatives": []
+}

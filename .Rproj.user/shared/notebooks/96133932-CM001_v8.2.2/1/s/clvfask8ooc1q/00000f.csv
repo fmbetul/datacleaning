@@ -1,0 +1,7 @@
+"0","source(""/Users/macbook/Documents/R_projects/datacleaning/R/"")
+"
+"2","Warning: 'raw = FALSE' but '/Users/macbook/Documents/R_projects/datacleaning/R/' is not a regular file"
+"2","Warning: cannot open file '/Users/macbook/Documents/R_projects/datacleaning/R/': it is a directory"
+"2","Error in file(filename, ""r"", encoding = encoding) : 
+  cannot open the connection
+"

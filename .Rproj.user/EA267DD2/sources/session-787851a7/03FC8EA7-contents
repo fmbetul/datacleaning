@@ -1,0 +1,174 @@
+---
+title: "CM001_v8.2"
+Object: Try DataCleanFunc Package
+2023/04/30
+This version works perfect with DataCleanPkg_v1.1.R (2023/4/30)
+---
+
+# 1. Install Packages and Data
+
+```{r setup}
+setwd("/Users/macbook/Documents/DoegeLab/projects/multiome2/arc/cm001/")
+
+library(Signac)
+library(Seurat)
+library(EnsDb.Hsapiens.v86)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(biovizBase)
+library(tidyverse)
+library(ggpubr)
+library(here)
+
+set.seed(1234)
+```
+
+```{r}
+load("cm001.rds")
+
+#Rename clusters
+cm001 <- RenameIdents(cm001,
+                     'POMC/NR5A2' = 'POMC.NR5A2',
+                     'SST/OTP' = 'SST.OTP')
+cm001$celltype <- Idents(cm001)
+```
+
+```{r}
+# load functions
+source("/Users/macbook/Documents/DoegeLab/projects/functions/DataCleanPackage/DataCleanPkg_v1.1.R")
+```
+
+
+
+# 8. Data Clean-up
+
+Inspect the data before beginning and look at the ClusterNo.
+
+```{r}
+DimPlot(cm001, reduction = "umap", label = T)
+table(Idents(cm001))
+```
+
+
+## 8.1 Crop the Clusters
+
+Crop the clusters to obtain Clean_Clusters. 
+
+CropCluster() function inputs:
+  1. Name of SeuratObject
+  2. ClusterNo or ClusterName you want to work on.
+  3. UMAP coordinates of the cluster boundaries you want to have.
+  
+CropCluster() outputs:
+  1. Information regarding the original clusters and the changes you are planning to make. (in R Console)
+  2. UMAP of the original cluster.
+  3. UMAP of the cropped cluster.
+  4. UMAP of the current leftovers.
+  5. Cluster_Clean will be automatically saved to global environment.
+  
+
+```{r}
+# SST.OTP
+CropCluster(cm001, ClusterNo = 2, min.x = -1, max.x = 4, max.y = -2)
+```
+
+```{r}
+# POMC
+CropCluster(cm001, ClusterNo = 3, min.x = -5, max.x = 4.5, max.y = 1.4)
+```
+
+```{r}
+# POMC.NR5A2
+CropCluster(cm001, ClusterNo = 1, min.x = 1.5, max.x = 12, min.y = -4, max.y = 1.4)
+```
+
+```{r}
+# Neuronal
+CropCluster(cm001, ClusterNo = 4, min.x = -3.1, max.x = 5, min.y = 1.4)
+```
+
+```{r}
+# Progenitors
+CropCluster(cm001, ClusterNo = 5, max.x = -3.1, min.y = 1.4)
+```
+
+```{r}
+# VLMC
+CropCluster(cm001, ClusterNo = 6, max.x = -5, max.y = 1.4)
+```
+
+## 8.2 Get the Leftovers
+
+Get the number of cells in Leftovers and visualize them.
+
+```{r}
+getLeftovers(cm001)
+```
+
+
+## 8.3 Reassign the Leftovers
+
+```{r}
+assignExtraCluster(cm001, "SST.OTP", min.x = -1, max.x = 4, max.y = -2)
+```
+
+```{r}
+validateExtraCluster(cm001)
+```
+
+```{r}
+assignExtraCluster(cm001, "POMC.NR5A2", min.x = 1.5, max.y = 1.4)
+```
+
+```{r}
+validateExtraCluster(cm001)
+```
+
+```{r}
+assignExtraCluster(cm001, ClusterName = "POMC", min.x = -5, max.x = 1.5, max.y = 1.4)
+```
+
+```{r}
+validateExtraCluster(cm001)
+```
+
+```{r}
+assignExtraCluster(cm001, ClusterName = "Neuronal", min.x = -3.1, min.y = 1.4)
+```
+
+```{r}
+validateExtraCluster(cm001)
+```
+
+```{r}
+assignExtraCluster(cm001, "Progenitors", min.y = 1.4)
+```
+
+```{r}
+validateExtraCluster(cm001)
+```
+
+```{r}
+assignExtraCluster(cm001, "VLMC")
+```
+
+
+
+## 8.4 Get Final Clusters
+
+```{r}
+cm001 <- getFinalClusters(cm001)
+```
+
+
+```{r}
+# Save SeuratObject_cleaned_umap.pdf
+pdf("output/cm001_cleaned_umap.pdf", width=12, height=10)
+dimplot <- DimPlot(cm001, reduction="umap", label=T)
+print(dimplot)
+dev.off()
+
+# Save SeuratObject_cleaned.rds
+saveRDS(cm001, file = "output/cm001_cleaned.rds")
+```
+
+

@@ -1,0 +1,7 @@
+"0","load(""cm001.rds"")"
+"0",""
+"0","#Rename clusters"
+"0","cm001 <- RenameIdents(cm001,"
+"0","                     'POMC/NR5A2' = 'POMC.NR5A2',"
+"0","                     'SST/OTP' = 'SST.OTP')"
+"0","cm001$celltype <- Idents(cm001)"
