@@ -2,19 +2,24 @@
 % Please edit documentation in R/getFinalClusters.R
 \name{getFinalClusters}
 \alias{getFinalClusters}
-\title{Get Final Clusters}
+\title{getFinalClusters function}
 \usage{
 getFinalClusters(SeuData)
 }
 \arguments{
-\item{SeuData}{Seurat object containing the data}
+\item{SeuData}{A Seurat object that needs to have its cell identities updated.}
 }
 \value{
-Updated Seurat object with the Idents and celltype columns updated
+SeuData The updated Seurat object, with the new cell identities reflected in the metadata.
+It also prints a UMAP plot of the updated Seurat object.
 }
 \description{
-This function updates the Idents of the clusters in the Seurat object based on the object names ending with _Clean or _Extra.
+This function updates the identities of the cells in the input Seurat object
+according to the "_Clean" and "_Extra" clusters defined in the global "datacleaning_list",
+and plots the final UMAP visualization. It also updates the "celltype" column in
+the Seurat object's metadata and removes the "datacleaning_list" from the global environment.
 }
 \examples{
-getFinalClusters(SeuData)
+# Assuming 'SeuratObject' is your Seurat object:
+SeuratObject <- getFinalClusters(SeuratObject)
 }
