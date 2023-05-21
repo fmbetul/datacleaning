@@ -1,23 +1,23 @@
 Package: datacleaning
-Title: A package for cleaning up the clusters of single-cell RNA-seq data
 Type: Package
-Version: 1.0
+Title: Data Cleaning Functions for Seurat Object
+Version: 2.0
 Author: F. M. Betul Erol
-Maintainer: The package maintainer <fmab_erol@hotmail.com>
-Description: datacleaning package provides functions for cleaning-up and visualizing the clusters of a SeuratObject generated from single-cell RNA-seq data. This package includes functions for cropping clusters, assigning cells to clusters based on their UMAP coordinates, and visualizing cluster assignments. 
+Maintainer: F. M. Betul Erol <fmab_erol@hotmail.com>
+Description: This package provides data cleaning functions for Seurat objects, which are commonly used for single-cell RNA sequencing (scRNA-seq) data analysis.
+    The package includes functions for updating cell identities based on specified clusters and visualizing the resulting data using UMAP plots.
+    The main function of the package is `getFinalClusters`, which takes a Seurat object as input and updates the cell identities according to the "_Clean" and "_Extra" clusters defined in the global "datacleaning_list". 
+    The function also updates the "celltype" column in the Seurat object's metadata and removes the "datacleaning_list" from the global environment. 
+    Additionally, it prints a UMAP plot of the updated Seurat object.
+    The latest version (2.0) removes the `getLeftovers` and `validateExtraCluster` functions, and renames the `CropCluster` function as `cropCluster` and `assignExtraCluster` as `assignNewCluster`.
+Dependencies:
+  - R (>= 3.6.0)
+  - Seurat (>= 4.0.0)
+Imports:
+  Seurat,
+  SeuratObject
 License: GPL-3
 Encoding: UTF-8
+URL: https://github.com/fmbetul/datacleaning
 LazyData: true
 RoxygenNote: 7.2.3
-Imports:
-    Seurat (>= 4.0),
-    SeuratObject,
-    ggplot2,
-    rstatix,
-    reshape2,
-    dplyr,
-    cowplot
-Suggests:
-    knitr,
-    rmarkdown
-    
