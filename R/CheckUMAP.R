@@ -14,7 +14,6 @@
 #' @return A UMAP plot for the specified subset of cells
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject Idents AddMetaData
-#' @export
 #'
 
 
